@@ -27,6 +27,44 @@
       color: var(--text-light);
     }
 
+    /* Loader */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--primary-dark);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      flex-direction: column;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 6px solid var(--muted);
+      border-top: 6px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .loading-text {
+      margin-top: 15px;
+      color: var(--accent);
+      font-weight: bold;
+      font-size: 18px;
+      letter-spacing: 1px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
     .login-box {
       max-width: 400px;
       margin: 100px auto;
@@ -242,6 +280,11 @@
 </head>
 <body>
 
+<div id="loader">
+  <div class="spinner"></div>
+  <div class="loading-text">Logging in...</div>
+</div>
+
 <div class="login-box" id="loginBox">
   <h2>LOGIN</h2>
   <input type="text" id="username" placeholder="USERNAME (ADMIN)">
@@ -255,8 +298,6 @@
         <h2 style="font-size: 30px; margin: 0px;">BROZO</h2>
         <h4 style="margin: 0px 0px 50px 0px;">Financial dashboard</h4>
     </div>
-    
-    
     <div class="navBtn">
       <a href="#">Dashboard</a>
       <a href="#" onclick="logout()">Logout</a>
@@ -264,7 +305,7 @@
   </div>
 
   <div class="main">
-    <h1> BROZO FINANCIAL DASHBOARD</h1>
+    <h1>FINANCIAL DASHBOARD</h1>
 
     <div class="cards">
       <div class="card">
@@ -320,11 +361,17 @@
   function login() {
     const user = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
+
     if (user.toLowerCase() === "admin" && pass === "1234") {
-      localStorage.setItem("loggedIn", "true");
-      document.getElementById("loginBox").style.display = "none";
-      document.getElementById("dashboard").style.display = "block";
-      updateDashboard();
+      document.getElementById("loader").style.display = "flex";
+
+      setTimeout(() => {
+        localStorage.setItem("loggedIn", "true");
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("dashboard").style.display = "block";
+        document.getElementById("loader").style.display = "none";
+        updateDashboard();
+      }, 1500);
     } else {
       alert("Incorrect username or password.");
     }
@@ -409,6 +456,7 @@
       document.getElementById("dashboard").style.display = "block";
       updateDashboard();
     }
+    document.getElementById("loader").style.display = "none";
   };
 </script>
 
